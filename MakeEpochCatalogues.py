@@ -13,8 +13,8 @@ date = "2018-11-14"
 
 def get_ref_cat():
     """
-
-    :return:
+    Create a basic reference catalogue on the equator with a range of fluxes
+    :return: array of [ra,dec,flux]
     """
     nsrc = 10
     rarange = (175, 185)
@@ -26,10 +26,10 @@ def get_ref_cat():
 
 def get_catalogues(refcat, nepochs):
     """
-
-    :param refcat:
-    :param nepochs:
-    :return:
+    Use a reference catalogue to create a new set of epoch catalogues where each source has a modulation index of 0.05
+    :param refcat: array of [ra,dec,flux]
+    :param nepochs: number of epochs to simulate
+    :return: list of [ [ra,dec,flux], ... ] one per epoch
     """
     # generate all the light curves
     lc2d = np.ones(shape=(len(refcat),nepochs))
