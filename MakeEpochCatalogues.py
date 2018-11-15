@@ -32,7 +32,7 @@ def get_catalogues(refcat, nepochs):
     :return: list of [ [ra,dec,flux], ... ] one per epoch
     """
     # generate all the light curves
-    lc2d = np.ones(shape=(len(refcat),nepochs))
+    lc2d = np.ones(shape=(len(refcat), nepochs))
     fluxes = refcat[:,2]
     for i, f in enumerate(fluxes):
         lc = get_lc(nepochs, f, 0.05)
