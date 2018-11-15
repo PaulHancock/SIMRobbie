@@ -48,8 +48,22 @@ def get_catalogues(refcat, nepochs):
     return epochs
 
 
+def aegean_format(catalogue, out):
+    """
+    Save a catalogue in a format that Aegean will recognize
+    :param catalogue: Catalogue
+    :param out: Output filename
+    :return:
+    """
+    print("Write to file {0}".format(out))
+    return
+
+
 if __name__ == "__main__":
-    nepochs = 3
+    nepochs = 5
     refcat = get_ref_cat()
+    aegean_format(refcat, 'Reference.fits')
     epochs = get_catalogues(refcat, nepochs)
-    print(epochs)
+    for i, ecat in enumerate(epochs):
+        aegean_format(ecat, 'Epoch{0:02d}_comp.fits'.format(i))
+
