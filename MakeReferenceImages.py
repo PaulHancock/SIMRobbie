@@ -32,7 +32,6 @@ def make_ref(template, out=None):
     data = np.random.normal(loc=0, scale=1, size=(2000, 2000))
     pixperbeam = abs(header['BMAJ'] / header['CDELT1'])
     sigma = pixperbeam / (2*np.sqrt(2*np.log(2)))
-    print(pixperbeam,sigma)
     data = gaussian_filter(data, sigma=sigma)
     # zero mean
     data -= np.mean(data)
@@ -47,4 +46,5 @@ def make_ref(template, out=None):
 
 
 if __name__ == '__main__':
-    make_ref('template.fits', out='out.fits')
+    for i in range(5):
+        make_ref('template.fits', out='Epoch{0:02d}.fits'.format(i))
