@@ -11,7 +11,7 @@ from scipy.ndimage.filters import gaussian_filter
 author = "Paul Hancock"
 date = "2018-11-15"
 
-def make_ref(template):
+def make_ref(template, out=None):
     """
 
     :param template:
@@ -40,9 +40,11 @@ def make_ref(template):
     data /= np.std(data)
     # rms = 50mJy
     data *= 50e-3
-    fits.writeto('out.fits',data, header, overwrite=True)
-    return
+    hdulist = fits.PrimaryHDU(data=data, header=header)
+    if out is not None:
+        hdulist.writeto(out, overwrite=True)
+    return hdulist
 
 
 if __name__ == '__main__':
-    make_ref('template.fits')
+    make_ref('template.fits', out='out.fits')
