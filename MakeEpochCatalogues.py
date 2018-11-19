@@ -35,8 +35,12 @@ def get_catalogues(refcat, nepochs):
     lc2d = np.ones(shape=(len(refcat), nepochs))
     fluxes = refcat[:,2]
     for i, f in enumerate(fluxes):
+        # all light curves have some variability in them
         lc = get_lc(nepochs, f, 0.05)
         lc2d[i] = lc
+        # 0.1% of sources are transient
+        if np.random.rand() < 0.001:
+            lc2d[i] = get_transient_lc(nepochs, f, np.random.randint(0, nepochs))
 
     # assign one epoch of fluxes to each source
     epochs = []
