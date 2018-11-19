@@ -37,8 +37,8 @@ def make_ref(template, out=None):
     data -= np.mean(data)
     # rms =1
     data /= np.std(data)
-    # rms = 50mJy
-    data *= 50e-3
+    # rms = 5mJy
+    data *= 5e-3
     hdulist = fits.PrimaryHDU(data=data, header=header)
     if out is not None:
         hdulist.writeto(out, overwrite=True)
