@@ -8,8 +8,10 @@ from MakeLightCurves import get_transient_lc, get_lc
 from AegeanTools.catalogs import save_catalog
 from AegeanTools.models import SimpleSource
 
+from settings import nepochs, nsrc, rarange, decrange, fluxrange
+
 author = "Paul Hancock"
-date = "2018-11-14"
+date = "2018-11-19"
 
 
 def get_ref_cat():
@@ -17,10 +19,6 @@ def get_ref_cat():
     Create a basic reference catalogue on the equator with a range of fluxes
     :return: array of [ra,dec,flux]
     """
-    nsrc = 10
-    rarange = (175, 185)
-    decrange = (-5, 5)
-    fluxrange = (1e-3, 1)
     cat = get_sources(rarange, decrange, fluxrange, nsrc)
     return cat
 
@@ -34,7 +32,7 @@ def get_catalogues(refcat, nepochs):
     """
     # generate all the light curves
     lc2d = np.ones(shape=(len(refcat), nepochs))
-    fluxes = refcat[:,2]
+    fluxes = refcat[:, 2]
     for i, f in enumerate(fluxes):
         # all light curves have some variability in them
         lc = get_lc(nepochs, f, 0.05)
@@ -74,7 +72,6 @@ def aegean_format(catalogue, out):
 
 
 if __name__ == "__main__":
-    nepochs = 5
     refcat = get_ref_cat()
     aegean_format(refcat, 'Reference.fits')
     epochs = get_catalogues(refcat, nepochs)

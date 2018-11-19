@@ -46,5 +46,6 @@ def make_ref(template, out=None):
 
 
 if __name__ == '__main__':
-    for i in range(5):
-        make_ref('template.fits', out='Epoch{0:02d}.fits'.format(i))
+    from settings import nepochs
+    for i in range(nepochs):
+        make_ref('template.fits', out='Epoch{0:02d}_noise.fits'.format(i))
