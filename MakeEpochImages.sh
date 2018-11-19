@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 
 
-
-
-all:
-  AeRes -f Epoch00.fits -r Epoch00_wSrc.fits --add -c Epoch00_comp_simp.fits
+epochs=($( ls Epoch??_noise.fits ))
+for e in "${epochs[@]}"
+do
+  echo ${e}
+  AeRes -f ${e} -r ${e%%_noise.fits}.fits --add -c ${e%%_noise.fits}_comp_simp.fits
+done
