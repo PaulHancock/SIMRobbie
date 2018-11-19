@@ -5,7 +5,8 @@ from __future__ import print_function
 import numpy as np
 from MakeRefCatalogue import get_sources
 from MakeLightCurves import get_transient_lc, get_lc
-
+from AegeanTools.catalogs import save_catalog
+from AegeanTools.models import SimpleSource
 
 author = "Paul Hancock"
 date = "2018-11-14"
@@ -59,7 +60,16 @@ def aegean_format(catalogue, out):
     :param out: Output filename
     :return:
     """
-    print("Write to file {0}".format(out))
+    sources = []
+    for i, c in enumerate(catalogue):
+        src = SimpleSource()
+        src.ra, src.dec, src.peak_flux = c
+        src.uuid = "injected_{0:04d}".format(i)
+        src.pa = 0
+        src.a = src.b = 0.0326580516349937 * 3600
+        sources.append(src)
+    save_catalog(out, sources)
+    print("Wrote to file {0}".format(out))
     return
 
 
