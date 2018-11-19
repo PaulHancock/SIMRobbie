@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 
 
+python MakeReferenceImages.py
+
+python MakeEpochCatalogues.py
+
 epochs=($( ls Epoch??_noise.fits ))
 for e in "${epochs[@]}"
 do
