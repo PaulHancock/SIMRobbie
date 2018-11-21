@@ -7,6 +7,7 @@ import astropy
 from astropy.io import fits
 import scipy
 from scipy.ndimage.filters import gaussian_filter
+from settings import imagerms
 
 author = "Paul Hancock"
 date = "2018-11-15"
@@ -37,8 +38,8 @@ def make_ref(template, out=None):
     data -= np.mean(data)
     # rms =1
     data /= np.std(data)
-    # rms = 5mJy
-    data *= 5e-3
+    # rms = imagerms
+    data *= imagerms
     hdulist = fits.PrimaryHDU(data=data, header=header)
     if out is not None:
         hdulist.writeto(out, overwrite=True)
