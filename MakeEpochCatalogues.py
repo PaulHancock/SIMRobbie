@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+from astropy.table import Table
 import numpy as np
 from MakeRefCatalogue import get_sources
 from MakeLightCurves import get_transient_lc, get_lc
@@ -32,6 +33,7 @@ def get_catalogues(refcat, nepochs):
     """
     # generate all the light curves
     lc2d = np.ones(shape=(len(refcat), nepochs))
+    category = []
     fluxes = refcat[:, 2]
     for i, f in enumerate(fluxes):
         # all light curves have some variability in them
@@ -40,6 +42,9 @@ def get_catalogues(refcat, nepochs):
         # 5% of sources are transient
         if np.random.rand() < 0.05:
             lc2d[i] = get_transient_lc(nepochs, f, np.random.randint(0, nepochs))
+            category.append(0)
+        else:
+            category.append(1)
 
     # assign one epoch of fluxes to each source
     epochs = []
@@ -48,7 +53,10 @@ def get_catalogues(refcat, nepochs):
         cat[:, 2] = lc2d[:, n]
         epochs.append(cat)
 
-    return epochs
+    # master input catalog
+    master = np.hstack((refcat.copy(), np.array(category)[:,None], lc2d))
+
+    return epochs, master
 
 
 def aegean_format(catalogue, out):
@@ -74,7 +82,11 @@ def aegean_format(catalogue, out):
 if __name__ == "__main__":
     refcat = get_ref_cat()
     aegean_format(refcat, 'Reference.fits')
-    epochs = get_catalogues(refcat, nepochs)
+    epochs, master = get_catalogues(refcat, nepochs)
     for i, ecat in enumerate(epochs):
         aegean_format(ecat, 'Epoch{0:02d}_comp.fits'.format(i))
 
+    names = ['ra', 'dec', 'Flux_mean', 'type'] + ['Flux_{0:02d}'.format(i) for i in range(nepochs)]
+    print(names)
+    t = Table(data=master, names=names)
+    t.write("master.fits", overwrite=True)
