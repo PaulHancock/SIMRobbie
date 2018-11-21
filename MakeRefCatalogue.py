@@ -49,9 +49,6 @@ def get_sources(rarange, decrange, fluxrange, nsrc):
 
 
 if __name__ == "__main__":
-    nsrc = 10
-    rarange=(175,185)
-    decrange=(-5,5)
-    fluxrange=(1e-3, 1)
+    from settings import nsrc, rarange, decrange, fluxrange
     cat = get_sources(rarange, decrange, fluxrange, nsrc)
     print(cat)
