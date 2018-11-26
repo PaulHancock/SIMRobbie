@@ -9,7 +9,7 @@ from MakeLightCurves import get_transient_lc, get_lc
 from AegeanTools.catalogs import save_catalog
 from AegeanTools.models import SimpleSource
 
-from settings import nepochs, nsrc, rarange, decrange, fluxrange
+from settings import nepochs, nsrc, rarange, decrange, fluxrange, seed
 
 author = "Paul Hancock"
 date = "2018-11-19"
@@ -31,6 +31,7 @@ def get_catalogues(refcat, nepochs):
     :param nepochs: number of epochs to simulate
     :return: list of [ [ra,dec,flux], ... ] one per epoch
     """
+    np.random.seed(seed)
     # generate all the light curves
     lc2d = np.ones(shape=(len(refcat), nepochs))
     category = []
@@ -54,7 +55,7 @@ def get_catalogues(refcat, nepochs):
         epochs.append(cat)
 
     # master input catalog
-    master = np.hstack((refcat.copy(), np.array(category)[:,None], lc2d))
+    master = np.hstack((refcat.copy(), np.array(category)[:, None], lc2d))
 
     return epochs, master
 

@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import numpy as np
+from settings import nsrc, rarange, decrange, fluxrange, seed
 
 author = "Paul Hancock"
 date = "2018-11-14"
@@ -16,7 +17,8 @@ def get_positions(rarange, decrange, npoints):
     :param npoints:
     :return:
     """
-    ras = np.random.uniform(rarange[0],rarange[1], size=npoints)
+    np.random.seed(seed)
+    ras = np.random.uniform(rarange[0], rarange[1], size=npoints)
     decs = np.random.uniform(decrange[0], decrange[1], size=npoints)
     pos = (ras, decs)
     return pos
@@ -49,6 +51,5 @@ def get_sources(rarange, decrange, fluxrange, nsrc):
 
 
 if __name__ == "__main__":
-    from settings import nsrc, rarange, decrange, fluxrange
     cat = get_sources(rarange, decrange, fluxrange, nsrc)
     print(cat)
