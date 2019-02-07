@@ -17,7 +17,7 @@ def get_positions(rarange, decrange, npoints):
     :param npoints:
     :return:
     """
-    np.random.seed(seed)
+    # np.random.seed(seed)
     ras = np.random.uniform(rarange[0], rarange[1], size=npoints)
     decs = np.random.uniform(decrange[0], decrange[1], size=npoints)
     pos = (ras, decs)

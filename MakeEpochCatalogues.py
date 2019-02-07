@@ -9,7 +9,8 @@ from MakeLightCurves import get_transient_lc, get_lc
 from AegeanTools.catalogs import save_catalog
 from AegeanTools.models import SimpleSource
 
-from settings import nepochs, nsrc, rarange, decrange, fluxrange, seed
+from settings import nepochs, rarange, decrange, fluxrange, seed
+from settings import nvar, ntrans, nnorm
 
 author = "Paul Hancock"
 date = "2018-11-19"
@@ -20,7 +21,11 @@ def get_ref_cat():
     Create a basic reference catalogue on the equator with a range of fluxes
     :return: array of [ra,dec,flux]
     """
-    cat = get_sources(rarange, decrange, fluxrange, nsrc)
+    np.random.seed(seed)
+    varcat = get_sources(rarange, decrange, fluxrange, nvar)
+    normcat = get_sources(rarange, decrange, fluxrange, nnorm)
+    transcat = get_sources(rarange, decrange, fluxrange, ntrans)
+    cat = np.vstack((varcat, normcat, transcat))
     return cat
 
 
@@ -36,16 +41,20 @@ def get_catalogues(refcat, nepochs):
     lc2d = np.ones(shape=(len(refcat), nepochs))
     category = []
     fluxes = refcat[:, 2]
-    for i, f in enumerate(fluxes):
-        # all light curves have some variability in them
+
+    #make variable sources
+    for i, f in enumerate(fluxes[:nvar]):
         lc = get_lc(nepochs, f, 0.05)
         lc2d[i] = lc
-        # 5% of sources are transient
-        if np.random.rand() < 0.05:
-            lc2d[i] = get_transient_lc(nepochs, f, np.random.randint(0, nepochs))
-            category.append(0)
-        else:
-            category.append(1)
+        category.append(1)
+    #make normal sources
+    for i, f in enumerate(fluxes[nvar:nvar+nnorm]):
+        lc2d[i+nvar] = [f] * nepochs
+        category.append(0)
+    #make transients
+    for i, f in enumerate(fluxes[nvar+nnorm:]):
+        lc2d[i+nvar+nnorm] = get_transient_lc(nepochs, f, np.random.randint(0, nepochs))
+        category.append(2)
 
     # assign one epoch of fluxes to each source
     epochs = []
