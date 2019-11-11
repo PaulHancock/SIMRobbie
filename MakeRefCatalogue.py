@@ -47,7 +47,7 @@ def get_sources(rarange, decrange, fluxrange, nsrc):
     """
     ra, dec = get_positions(rarange, decrange, nsrc)
     flux = get_fluxes(fluxrange[0], fluxrange[1], nsrc)
-    return np.array(zip(ra, dec, flux))
+    return np.array(list(zip(ra, dec, flux)))
 
 
 if __name__ == "__main__":
