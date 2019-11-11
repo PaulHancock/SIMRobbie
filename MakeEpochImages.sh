@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 
-# MIMAS +p 173 -7 187 -7 187 7 173 7 -o square.mim
-# MIMAS --mim2reg square.mim square.reg
+echo "Making region file"
+MIMAS +p 173 -7 187 -7 187 7 173 7 -o square.mim
+MIMAS --mim2reg square.mim square.reg
+
 echo "Making reference images"
 python MakeReferenceImages.py || exit
 
