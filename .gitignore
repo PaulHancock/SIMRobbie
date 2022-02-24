@@ -1,2 +1,7 @@
 .idea
 *.fits
+env/*
+*.pyc
+*.mim
+*.reg
+zenodo/*
