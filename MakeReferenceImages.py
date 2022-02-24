@@ -3,7 +3,7 @@
 import numpy as np
 from astropy.io import fits
 from scipy.ndimage import gaussian_filter
-from settings import imagerms, data_dir
+from settings import imagerms, data_dir, imsize, rarange, decrange
 
 __author__ = "Paul Hancock"
 __date__ = "2022-02-24"
@@ -17,17 +17,19 @@ def make_ref(template, out=None):
     """
     hdulist = fits.open(template)
     header = hdulist[0].header
-    header["CRVAL1"] = 180
-    header["CRVAL2"] = 0
-    header["CRPIX1"] = 1001
-    header["CRPIX2"] = 1001
+    header["CRVAL1"] = np.mean(rarange)
+    header["CRVAL2"] = np.mean(decrange)
+    header["CRPIX1"] = imsize[0] / 2
+    header["CRPIX2"] = imsize[1] / 2
+    header["CDELT1"] = (rarange[1] - rarange[0]) / imsize[0]
+    header["CDELT2"] = (decrange[1] - decrange[0]) / imsize[1]
     del header["WSC*"]
     del header["IMAGERMS"]
     del header["ORIGIN"]
     del header["*3"]
     del header["*4"]
 
-    data = np.random.normal(loc=0, scale=1, size=(2000, 2000))
+    data = np.random.normal(loc=0, scale=1, size=imsize)
     pixperbeam = abs(header["BMAJ"] / header["CDELT1"])
     sigma = pixperbeam / (2 * np.sqrt(2 * np.log(2)))
     data = gaussian_filter(data, sigma=sigma)
