@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-from __future__ import print_function
-
 import numpy as np
 
 author = "Paul Hancock"
@@ -53,7 +51,11 @@ def get_transient_lc(nepochs, flux, transient_epoch):
 if __name__ == "__main__":
     lc = get_lc(nepochs=15, flux=0.75, m=0.2)
     print(lc)
-    print("mean {0}, std {1}, m {2}".format(np.mean(lc), np.std(lc), np.std(lc)/np.mean(lc)))
+    print(
+        "mean {0}, std {1}, m {2}".format(
+            np.mean(lc), np.std(lc), np.std(lc) / np.mean(lc)
+        )
+    )
 
     t = get_transient_lc(nepochs=4, flux=0.62, transient_epoch=2)
     print(t)

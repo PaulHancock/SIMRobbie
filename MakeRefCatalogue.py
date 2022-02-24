@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 
-from __future__ import print_function
-
 import numpy as np
-from settings import nsrc, rarange, decrange, fluxrange, seed
+from settings import nsrc, rarange, decrange, fluxrange
 
 author = "Paul Hancock"
 date = "2018-11-14"
