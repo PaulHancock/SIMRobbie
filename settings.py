@@ -2,14 +2,14 @@
 __author__ = "Paul Hancock"
 __date__ = "2022-02-24"
 
-seed = 20181126
-nepochs = 25
-nsrc = 1100
-nvar = 500
-ntrans = 100
-nnorm = 500
-rarange = (173, 187)
-decrange = (-7, 7)
-fluxrange = (5e-3, 1)
-imagerms = 5e-3  # Jy
-data_dir = "data"
+seed = 20181126  # Seed for random number generator
+nepochs = 25  # Total number of epochs to generate
+nsrc = 1100  # Total number of sources to generate
+nvar = 500  # Number of sources which are variable (flux varies between epochs)
+ntrans = 100  # Number of sources which are transient (present in only a single epoch)
+nnorm = 500  # Number of persistent sources (no change between epochs)
+rarange = (173, 187)  # The range of RA over which to simulate the sources (Degrees)
+decrange = (-7, 7)  # The range of Dec over which to simulate the sources (Degrees)
+fluxrange = (5e-3, 1)  # The min/max flux of sources in Jy
+imagerms = 5e-3  # Individual epoch image rms in Jy
+data_dir = "data"  # The directory in which the simulated files will be stored
