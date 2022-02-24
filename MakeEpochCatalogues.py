@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-from __future__ import print_function
-
 from astropy.table import Table
 import numpy as np
 from MakeRefCatalogue import get_sources
@@ -9,11 +7,20 @@ from MakeLightCurves import get_transient_lc, get_lc
 from AegeanTools.catalogs import save_catalog
 from AegeanTools.models import SimpleSource
 
-from settings import nepochs, rarange, decrange, fluxrange, seed
-from settings import nvar, ntrans, nnorm
+from settings import (
+    nepochs,
+    rarange,
+    decrange,
+    fluxrange,
+    seed,
+    data_dir,
+    nvar,
+    ntrans,
+    nnorm,
+)
 
-author = "Paul Hancock"
-date = "2018-11-19"
+__author__ = "Paul Hancock"
+__date__ = "2022-02-24"
 
 
 def get_ref_cat():
@@ -42,18 +49,20 @@ def get_catalogues(refcat, nepochs):
     category = []
     fluxes = refcat[:, 2]
 
-    #make variable sources
+    # make variable sources
     for i, f in enumerate(fluxes[:nvar]):
         lc = get_lc(nepochs, f, 0.05)
         lc2d[i] = lc
         category.append(1)
-    #make normal sources
-    for i, f in enumerate(fluxes[nvar:nvar+nnorm]):
-        lc2d[i+nvar] = [f] * nepochs
+    # make normal sources
+    for i, f in enumerate(fluxes[nvar : nvar + nnorm]):
+        lc2d[i + nvar] = [f] * nepochs
         category.append(0)
-    #make transients
-    for i, f in enumerate(fluxes[nvar+nnorm:]):
-        lc2d[i+nvar+nnorm] = get_transient_lc(nepochs, f, np.random.randint(0, nepochs))
+    # make transients
+    for i, f in enumerate(fluxes[nvar + nnorm :]):
+        lc2d[i + nvar + nnorm] = get_transient_lc(
+            nepochs, f, np.random.randint(0, nepochs)
+        )
         category.append(2)
 
     # assign one epoch of fluxes to each source
@@ -91,12 +100,14 @@ def aegean_format(catalogue, out):
 
 if __name__ == "__main__":
     refcat = get_ref_cat()
-    aegean_format(refcat, 'Reference.fits')
+    aegean_format(refcat, f"{data_dir}/Reference_comp.fits")
     epochs, master = get_catalogues(refcat, nepochs)
     for i, ecat in enumerate(epochs):
-        aegean_format(ecat, 'Epoch{0:02d}_comp.fits'.format(i))
+        aegean_format(ecat, f"{data_dir}/Epoch{i:02d}_comp.fits")
 
-    names = ['ra', 'dec', 'Flux_mean', 'type'] + ['Flux_{0:02d}'.format(i) for i in range(nepochs)]
+    names = ["ra", "dec", "Flux_mean", "type"] + [
+        f"Flux_{i:02d}" for i in range(nepochs)
+    ]
     print(names)
     t = Table(data=master, names=names)
-    t.write("master.fits", overwrite=True)
+    t.write(f"{data_dir}/Reference_all.fits", overwrite=True)

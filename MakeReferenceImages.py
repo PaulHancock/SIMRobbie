@@ -1,16 +1,13 @@
 #! /usr/bin/env python
 
-from __future__ import print_function
-
 import numpy as np
-import astropy
 from astropy.io import fits
-import scipy
-from scipy.ndimage.filters import gaussian_filter
-from settings import imagerms
+from scipy.ndimage import gaussian_filter
+from settings import imagerms, data_dir
 
-author = "Paul Hancock"
-date = "2018-11-15"
+__author__ = "Paul Hancock"
+__date__ = "2022-02-24"
+
 
 def make_ref(template, out=None):
     """
@@ -20,19 +17,19 @@ def make_ref(template, out=None):
     """
     hdulist = fits.open(template)
     header = hdulist[0].header
-    header['CRVAL1'] = 180
-    header['CRVAL2'] = 0
-    header['CRPIX1'] = 1001
-    header['CRPIX2'] = 1001
-    del header['WSC*']
-    del header['IMAGERMS']
-    del header['ORIGIN']
-    del header['*3']
-    del header['*4']
+    header["CRVAL1"] = 180
+    header["CRVAL2"] = 0
+    header["CRPIX1"] = 1001
+    header["CRPIX2"] = 1001
+    del header["WSC*"]
+    del header["IMAGERMS"]
+    del header["ORIGIN"]
+    del header["*3"]
+    del header["*4"]
 
     data = np.random.normal(loc=0, scale=1, size=(2000, 2000))
-    pixperbeam = abs(header['BMAJ'] / header['CDELT1'])
-    sigma = pixperbeam / (2*np.sqrt(2*np.log(2)))
+    pixperbeam = abs(header["BMAJ"] / header["CDELT1"])
+    sigma = pixperbeam / (2 * np.sqrt(2 * np.log(2)))
     data = gaussian_filter(data, sigma=sigma)
     # zero mean
     data -= np.mean(data)
@@ -46,7 +43,8 @@ def make_ref(template, out=None):
     return hdulist
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from settings import nepochs
+
     for i in range(nepochs):
-        make_ref('template.fits', out='Epoch{0:02d}_noise.fits'.format(i))
+        make_ref("template.fits", out=f"{data_dir}/Epoch{i:02d}_noise.fits")
