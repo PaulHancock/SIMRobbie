@@ -14,3 +14,4 @@ imsize = (1001, 1001)  # The size of the image in pixels
 fluxrange = (5e-3, 1)  # The min/max flux of sources in Jy
 imagerms = 5e-3  # Individual epoch image rms in Jy
 data_dir = "data"  # The directory in which the simulated files will be stored
+seconds_delta = 120 # Seconds to separate each epoch by
