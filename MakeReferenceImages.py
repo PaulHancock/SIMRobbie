@@ -3,13 +3,13 @@
 import numpy as np
 from astropy.io import fits
 from scipy.ndimage import gaussian_filter
-from settings import imagerms, data_dir, imsize, rarange, decrange
+from settings import imagerms, data_dir, imsize, rarange, decrange, offset
 
 __author__ = "Paul Hancock"
-__date__ = "2022-02-24"
+__date__ = "2022-03-24"
 
 
-def make_ref(template, out=None):
+def make_ref(template, epoch=0, out=None):
     """
 
     :param template:
@@ -17,7 +17,7 @@ def make_ref(template, out=None):
     """
     hdulist = fits.open(template)
     header = hdulist[0].header
-    header["CRVAL1"] = np.mean(rarange)
+    header["CRVAL1"] = np.mean(rarange) + offset * epoch
     header["CRVAL2"] = np.mean(decrange)
     header["CRPIX1"] = imsize[0] / 2
     header["CRPIX2"] = imsize[1] / 2
@@ -49,4 +49,4 @@ if __name__ == "__main__":
     from settings import nepochs
 
     for i in range(nepochs):
-        make_ref("template.fits", out=f"{data_dir}/Epoch{i:02d}_noise.fits")
+        make_ref("template.fits", epoch=i, out=f"{data_dir}/Epoch{i:02d}_noise.fits")

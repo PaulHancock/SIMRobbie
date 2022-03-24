@@ -1,6 +1,6 @@
 #! python
 __author__ = "Paul Hancock"
-__date__ = "2022-02-24"
+__date__ = "2022-03-24"
 
 seed = 20181126  # Seed for random number generator
 nepochs = 25  # Total number of epochs to generate
@@ -11,6 +11,7 @@ nnorm = 500  # Number of persistent sources (no change between epochs)
 rarange = (150, 157)  # The range of RA over which to simulate the sources (Degrees)
 decrange = (-15, -10)  # The range of Dec over which to simulate the sources (Degrees)
 imsize = (1001, 1001)  # The size of the image in pixels
+offset = 0.1  # Offset between consecutive image centers (Degrees)
 fluxrange = (5e-3, 1)  # The min/max flux of sources in Jy
 imagerms = 5e-3  # Individual epoch image rms in Jy
 data_dir = "data"  # The directory in which the simulated files will be stored
