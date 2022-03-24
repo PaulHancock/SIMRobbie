@@ -3,7 +3,9 @@
 import numpy as np
 from astropy.io import fits
 from scipy.ndimage import gaussian_filter
+import datetime
 from settings import imagerms, data_dir, imsize, rarange, decrange, offset
+
 
 __author__ = "Paul Hancock"
 __date__ = "2022-03-24"
@@ -23,6 +25,9 @@ def make_ref(template, epoch=0, out=None):
     header["CRPIX2"] = imsize[1] / 2
     header["CDELT1"] = (rarange[1] - rarange[0]) / imsize[0]
     header["CDELT2"] = (decrange[1] - decrange[0]) / imsize[1]
+    date_obs = datetime.datetime.strptime(header["DATE-OBS"], "%Y-%m-%dT%H:%M:%S.%f")
+    date_obs += datetime.timedelta(days=epoch)
+    header["DATE-OBS"] = date_obs.strftime("%Y-%m-%dT%H:%M:%S.%f")
     del header["WSC*"]
     del header["IMAGERMS"]
     del header["ORIGIN"]
